@@ -1,0 +1,351 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <style>
+        td {
+            border: 2px solid gray;
+            height: 70px;
+            width: 70px;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            font-size: 50;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        table tr:first-child td {
+            border-top: 0;
+        }
+
+        table tr:last-child td {
+            border-bottom: 0;
+        }
+
+        table tr td:first-child {
+            border-left: 0;
+        }
+
+        table tr td:last-child {
+            border-right: 0;
+        }
+    </style>
+</head>
+
+
+<body>
+    <div class="container m-5">
+
+        <table class="">
+
+            <tbody>
+                <tr>
+                    <td data-place="0" onclick="play(0)"></td>
+                    <td data-place="1" onclick="play(1)"></td>
+                    <td data-place="2" onclick="play(2)"></td>
+                </tr>
+                <tr>
+                    <td data-place="3" onclick="play(3)"></td>
+                    <td data-place="4"></td>
+                    <td data-place="5" onclick="play(5)"></td>
+                </tr>
+                <tr>
+                    <td data-place="6" onclick="play(6)"></td>
+                    <td data-place="7" onclick="play(7)"></td>
+                    <td data-place="8" onclick="play(8)"></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>
+<script>
+    let played
+    let tictac = [];
+    tictac.length = 9;
+    tictac[4] = 'X';
+    let a
+    let b
+    let c
+    let d
+    let wins = [
+        [0, 1, 2],
+        [0, 4, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 4, 6],
+        [2, 5, 8],
+        [3, 4, 5],
+        [6, 7, 8]
+    ];
+    let positions = [
+        [
+            [0, 2, 1],
+            [0, 3, 6],
+            [0, 4, 8],
+        ],
+        [
+            [1, 2, 0],
+            [1, 4, 7],
+        ],
+        [
+            [2, 6, 0],
+            [2, 0, 1],
+            [2, 5, 8],
+        ],
+        [
+            [3, 4, 5],
+            [3, 6, 0],
+        ],
+        [],
+        [
+            [5, 2, 8],
+            [5, 0, 3],
+        ],
+        [
+            [6, 7, 8],
+            [6, 0, 3],
+            [6, 4, 2],
+        ],
+        [
+            [7, 6, 8],
+            [7, 4, 1],
+        ],
+        [
+            [8, 5, 2],
+            [8, 6, 7],
+        ]
+
+    ]
+
+    $(`[data-place="4"]`).html('X');
+
+    play = (posi) => {
+        played = $(`[data-place="${posi}"`).html()
+console.log(posi);
+        if (played == '') {
+            $(`[data-place="${posi}"`).html('O')
+            tictac[posi] = 'O'
+            // console.log(tictac);
+            computerPlayer(posi)
+        } else {
+            console.log('not emt');
+            return
+        }
+    }
+
+
+
+    function place(plc) {
+        let length = tictac.length;
+        setTimeout(() => {
+            tictac[plc] = 'X'
+            $(`[data-place="${plc}"`).html('X');
+            winner()
+
+        }, 500);
+        // -config
+    }
+
+
+    function conditions(empty, a, b, c, d, posi) {
+        let key = Object.keys(tictac)
+        if (key.length == 2) {
+            if (posi == 1 || posi == 7) {
+                place(b + 1)
+            } else {
+                place(b)
+            }
+        }
+        else if (key.length == 4) {
+            for (let i = 0; i < positions.length; i++) {
+
+                for (let j = 0; j < positions[posi].length; j++) {
+
+                    let final = positions[posi][j]
+
+                    for (let k = 0; k < final.length; k++) {
+
+                        let post0 = $(`[data-place="${final[0]}"]`).html();//0
+                        let post1 = $(`[data-place="${final[1]}"]`).html();//1
+                        let post2 = $(`[data-place="${final[2]}"]`).html();//2
+
+                        if ((post1 == 'O' && post2 == 'O') || (post0 == 'O' && post2 == 'O') || (post0 == 'O' && post1 == 'O')) {
+
+                            if (!post1) {
+                                place(final[1])
+                                return
+                            }
+                            else if (!post0) {
+                                place(final[0])
+                                return
+                            }
+                            else if (!post2) {
+                                place(final[2])
+                                return
+                            }
+
+                        }
+                        else if ((post0 == 'O' && post1 == "" && post2 == "") || (post1 == 'O' && post0 == "" && post2 == "") || (post2 == 'O' && post1 == "" && post0 == "")) {
+                            if (!post1) {
+                                place(final[2])
+                                return
+                            }
+
+                        }
+
+                        else if (((post1 == 'X' && post2 == 'O') || (post0 == 'X' && post2 == 'O') || (post0 == 'X' && post1 == 'O'))
+                            || ((post1 == 'O' && post2 == 'X') || (post0 == 'O' && post2 == 'X') || (post0 == 'O' && post1 == 'X'))
+                        ) {
+                            if (!post1) {
+                                console.log('i love 1');
+                                if (positions[posi][1][1] == 4) {
+                                    place(positions[posi][1][0])
+                                    return
+                                } else {
+                                    place(positions[posi][1][1])
+                                    return
+                                }
+                            }
+                            else if (!post0) {
+                                place(final[0])
+                                return
+                            }
+                            else if (!post2) {
+                                place(final[2])
+                                return
+                            }
+
+                        }
+                    }
+                }
+                return
+            }
+        }
+        else if (key.length == 6) {
+            console.log('sixsix');
+            for (let l = 0; l < wins.length; l++) {
+                for (let m = 0; m < wins[l].length; m++) {
+
+
+                }
+            }
+
+
+        }
+
+
+
+
+     let computerPlayer = (posi) => {
+            let emp = []
+
+            for (let i = 0; i < tictac.length; i++) {
+                if (tictac[i] == undefined) {
+                    emp.push(i)
+                }
+            }
+            let select
+
+            a = posi + 3;      //10, 11  //6,8
+            b = a + 3;         //13,14   //9,11
+            c = posi + 1 //2,3 // 8,9
+            d = c + 1 //3,4 // 9,10
+            if (posi == 0 || posi == 1 || posi == 2) {
+                if (c == 2 && d == 3) {
+                    c = c - 2; // 0
+                    d = d - 1;//2
+                } else if (c == 3 && d == 4) {
+                    c = c - 3; //0
+                    d = d - 3;//1
+                }
+
+            }
+            else if (posi == 6 || posi == 7 || posi == 8) {
+                if (c == 8 && d == 9) {
+                    a = posi - 3; //4
+                    b = a - 3//1
+                    c = c - 2; // 6
+                    d = d - 1;//8
+                }
+                else if (c == 9 && d == 10) {
+                    a = posi - 3; //5
+                    b = a - 3//2
+                    c = c - 2; //7
+                    d = d - 4;//6
+                }
+                else if (c == 7 && d == 8) {
+                    a = posi - 3; // 3
+                    b = a - 3//0
+                    c = c; //7
+                    d = d;//8
+                }
+
+            }
+            else if (posi == 3 || posi == 5) {
+                b = b - 9;
+
+            }
+            let temi = []
+
+            for (let i = 0; i < wins.length; i++) {
+                select = wins[i];
+                if (select.indexOf(posi) > -1) {
+                    for (let j = 0; j < select.length; j++) {
+                        for (let i = 0; i < emp.length; i++) {
+                            if (emp[i] == select[j]) {
+                                temi.push(emp[i])
+                                conditions(temi, a, b, c, d, posi)
+                                return
+
+                            }
+                        }
+                    }
+                }
+            }
+
+
+        }
+
+
+        
+
+    }
+    function winner() {
+            for (let l = 0; l < wins.length; l++) {
+                // console.log(wins[l]);
+                for (let m = 0; m < wins[l].length; m++) {
+                    // console.log(wins[l][m]);
+                    let check0 = $(`[data-place="${wins[l][0]}"`).html();
+                    let check1 = $(`[data-place="${wins[l][1]}"`).html();
+                    let check2 = $(`[data-place="${wins[l][2]}"`).html();
+                    if (check0 == 'X' && check1 == 'X' && check2 == 'X') {
+                        console.log('winner');
+                        return
+                    }
+
+                }
+            }
+        }
+
+</script>
