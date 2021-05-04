@@ -18,7 +18,7 @@
     <script>
 
 
-        number = (a) => {
+        number = (...a) => {
             for (let i = 0; a.length > 1; i++) {
                 al = a.length;
                 let x = al - 2;
@@ -28,19 +28,54 @@
                 console.log('res1 =', res1[0], 'and res2 =', res2[0]);
                 sum = ((res1[0] * res2[0]) + res1[0] + res2[0]);
                 a.push(sum)
-                console.log(a, a.length);
+                // console.log(a, a.length);
                 $('.answer').html(`The number is ${a} and the length of the array is ${a.length}`)
                 x - 2;
             }
 
         }
-        number([1, 1 / 2, 1 / 3, 1 / 4, 1 / 5]);
+        number(1, 1 / 2, 1 / 3, 1 / 4, 1 / 5);
         //test with any range of number
         /*What are the possible value of the final number?
         Ans = if the array length is even, the final number is equal to the
         array length AND if the array length is odd, the final number is
         approximately equal to the array length
         */
+
+        //         Question 3
+        // There are seven cards in a hat, and on the card k there is a number 2k−1,   k = 1, 2, ..., 7. 
+        //Alephile picks the cards up at random from the hat, one card at a time,
+        // until the sum of the numbers on cards in his hand exceeds 124. What is the most probable sum he can get?
+
+
+
+
+        let total = 0;
+        let k = [1, 2, 3, 4, 5, 6, 7];
+        // let num
+        console.log(k, 'total 2', total);
+        if (total < 124) {
+            let time = setInterval(() => {
+                console.log(k);
+                let num = Math.floor(Math.random() * k.length);
+                console.log('num0', num);
+                let num1 = k[num]
+                k.splice(num, 1)
+                console.log('num2', num1);
+                let power = num1 - 1
+                console.log('power', power);
+                let card = Math.pow(2, power)
+                console.log('card', card);
+                total = total + card;
+                console.log('total', total);
+                if (total >= 124) {
+                   clearInterval(time)
+                   console.log(total); 
+                }
+            }, 3000);
+
+        } 
+        // Most probable sum = 127
     </script>
 </body>
 
